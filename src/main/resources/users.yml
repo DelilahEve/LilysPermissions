@@ -1,0 +1,9 @@
+users:
+  # User's entry
+  DelilahEve:
+    world: admin
+    world_nether: netherDefault
+    prefix: '&a[Queen]'
+    suffix: '&f'
+    permissions:
+    - is.a.queen

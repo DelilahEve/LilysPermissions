@@ -1,0 +1,10 @@
+# Should we save new users to users.yml when they join?
+save_on_join: true
+
+# Rank ladder lists, ordered from lowest rank to highest:
+ladders:
+  default:
+  - default
+  - mod
+  - admin
+  - owner

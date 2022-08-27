@@ -1,0 +1,15 @@
+name: LilysPerms
+version: 1.0.0
+description: permissions and chat formatting made simple
+load: POSTWORLD
+author: DelilahEve
+main: io.delilaheve.LilysPerms
+commands:
+  lperms:
+    description: core command for LilysPerms
+    aliases: lp
+    usage: could not parse command! for help use '/lp help' or '/lp ?'
+permissions:
+  lilysperms.use:
+    description: Allow user to configure LilysPerms through commands
+    default: op

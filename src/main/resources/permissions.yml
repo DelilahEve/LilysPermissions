@@ -1,0 +1,39 @@
+groups:
+  default:
+    default: true
+    prefix: '&a[Default]'
+    suffix: '&f'
+    permissions:
+    - essentials.tpa
+  netherDefault:
+    default: world_nether
+    prefix: '&4[Nether-Default]'
+    suffix: '&f'
+    permissions:
+    - essentials.tpa
+  worldSpecificGroup:
+    prefix: '&3[world only group]'
+    suffix: '&f'
+    worlds:
+    - world
+    permissions:
+    - essentials.tpa
+  mod:
+    prefix: '&b[Mod]'
+    suffix: '&f'
+    inherit:
+    - Default
+    permissions:
+    - essentials.tp
+  admin:
+    prefix: '&c[Admin]'
+    suffix: '&f'
+    inherit:
+    - Mod
+    permissions:
+    - essentials.*
+  owner:
+    prefix: '&6[Owner]'
+    suffix: '&f'
+    permissions:
+    - '*'
