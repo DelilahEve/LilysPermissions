@@ -1,15 +1,21 @@
-name: LilysPerms
+name: LilysPermissions
 version: 1.0.0
 description: permissions and chat formatting made simple
-load: POSTWORLD
 author: DelilahEve
-main: io.delilaheve.LilysPerms
+main: io.delilaheve.LilysPermissions
 commands:
-  lperms:
-    description: core command for LilysPerms
-    aliases: lp
-    usage: could not parse command! for help use '/lp help' or '/lp ?'
+  promote:
+    description: promote a user within a ladder
+    usage: /promote <user> [ladder]
+  demote:
+    description: demote a user within a ladder
+    usage: /demote <user> [ladder]
 permissions:
-  lilysperms.use:
-    description: Allow user to configure LilysPerms through commands
-    default: op
+  lilys_permissions.*:
+    children:
+      lilys_permissions.promote:
+        description: Permits use of the /promote command
+        default: op
+      lilys_permissions.demote:
+        description: Permits use of the /demote command
+        default: op

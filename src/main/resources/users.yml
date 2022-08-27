@@ -1,9 +1,23 @@
+# Users (players) recorded here can be provided with overriding properties.
+# It's recommended to read through permissions.yml before going over this file.
+#
+# Users do not have to be recorded here if they're only being given default
+# permissions (though you can configure the plugin such that all players are).
+# Users who are given non-default groups are automatically recorded here and
+# should not be removed otherwise the plugin will forget any groups they've
+# been assigned.
 users:
+
   # User's entry
   DelilahEve:
-    world: admin
-    world_nether: netherDefault
+    # Groups this user is part of
+    groups:
+      netherDefault
+      admin
+    # Prefix this user should have instead of their group's
     prefix: '&a[Queen]'
+    # Suffix this user should have instead of their group's
     suffix: '&f'
+    # Permissions this user should be given in addition to their group's
     permissions:
     - is.a.queen

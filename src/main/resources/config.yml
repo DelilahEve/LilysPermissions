@@ -1,10 +1,18 @@
-# Should we save new users to users.yml when they join?
-save_on_join: true
+# Should we save player's group information if they only have default groups?
+# Note that once a player is given a non-default role they will be recorded
+# in users.yml and this setting is only in regard to players with only a
+# default group.
+save_all_players: true
 
-# Rank ladder lists, ordered from lowest rank to highest:
-ladders:
-  default:
-  - default
-  - mod
-  - admin
-  - owner
+# What "mode" should a user's prefix operate in? Valid options are:
+#
+# override - This will result in the prefix a user is given in users.yml
+#            replacing the prefix given to them by their assigned group
+#
+# add      - This will result in the prefix a user is given in users.yml
+#            being placed before the group's prefix
+user_prefix_mode: override
+
+# What "mode" should a user's suffix operate in? Valid options are
+# the same as prefix modes.
+user_suffix_mode: override

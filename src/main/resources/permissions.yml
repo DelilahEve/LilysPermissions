@@ -1,39 +1,124 @@
+# All permissions groups must be defined in this "groups" node.
+# Any groups defined outside this node will be ignored.
+#
+# A note on reading this documentation: Players may at some points be
+# referred to as users, or members, and groups may at points be referred to
+# as roles  or ranks. I consider users and players the same thing, same for
+# groups, roles, and ranks. :)
+#
+# Groups should be defined in ascending order, meaning your lowest rank
+# should be defined first, and your highest rank last. When determining
+# permissions and chat formatting for players, if a conflict arises between
+# assigned groups, the plugin will take the highest group as the "correct"
+# one. This means if you assign a world-specific role (i.e. a creative world
+# role) to a user with a more broad role (one that applies to any role),
+# the one to come later in the list will be the one to take precedent.
 groups:
+
+  # Example of a default group, this will be the group given to
+  # any player on their first join of the server.
   default:
+    # Having default: true here is how we know this is the default group.
+    # Only the first group defined with this will be treated as default.
     default: true
-    prefix: '&a[Default]'
-    suffix: '&f'
+    # Chat prefix to be displayed for users in this group, supports colour coding.
+    prefix: &a[Default]
+    # Chat suffix to be displayed for users in this group. Recommended to have
+    # &f as the final text here as that will return the player's text to the normal
+    # white colour, without &f the player's text will be coloured as per the prefix.
+    suffix: &f
+    # list of permissions given to this group's members.
     permissions:
-    - essentials.tpa
+      some_plugin.basic_permission
+
+  # Example of a nether default group. This would be assigned as the default role
+  # when a user's first joined world is the nether (as opposed to the over-world)
+  # This supports any world so long as naming matches internal naming. If you're
+  # not sure of the name to use, you'd be best to contact the developer of the
+  # custom world to find out.
   netherDefault:
+    # In addition to supporting 'true', default can be set to a world name. This
+    # is how we achieve defaults for alternate worlds.
     default: world_nether
-    prefix: '&4[Nether-Default]'
-    suffix: '&f'
-    permissions:
-    - essentials.tpa
-  worldSpecificGroup:
-    prefix: '&3[world only group]'
-    suffix: '&f'
-    worlds:
-    - world
-    permissions:
-    - essentials.tpa
-  mod:
-    prefix: '&b[Mod]'
-    suffix: '&f'
+    prefix: &4[Nether-Default]
+    suffix: &f
+    # We can define an 'inherit' node and specify the names of groups we wish to
+    # inherit permissions, prefixes, and suffixes from. Permission lists will be
+    # merged, and prefix/suffix will only be inherited if not explicitly defined.
     inherit:
-    - Default
+      default
     permissions:
-    - essentials.tp
+      some_plugin.basic_permission
+
+  # Example of a world-specific group. This role and it's associated properties would
+  # only be applied in the worlds listed, and will override any previously defined
+  # groups the player is a member of. If the user is a member of a group defined after
+  # this one, and that role can be applied to the world(s) listed, that role will
+  # take precedent.
+  worldSpecificGroup:
+    prefix: &3[world only group]
+    suffix: &f
+    # We can define a worlds node to specify which worlds this group can be applied in.
+    # If not defined, the group will be assumed to be globally available.
+    worlds:
+      world_end
+    permissions:
+      some_plugin.basic_permission
+
+  # Example of a moderator role whose permissions and prefix/suffix are defined per-world.
+  mod:
+    prefix: &b[Mod]
+    suffix: &f
+    inherit:
+      default
+    # We can define a node with the name of a world to override prefix, suffix, and permissions
+    # when the player is in that world:
+    world:
+      prefix: &b[World Mod]
+      suffix: &a
+      permissions:
+        some.world.permission
+    world_nether:
+      prefix: &b[Nether Mod]
+      suffix: &c
+      permissions:
+        some.nether.permission
+    # We can still define global permissions for this group in addition to world-specific ones:
+    permissions:
+      global.permission
+
+  # Example of an admin group given a wildcard permission
   admin:
     prefix: '&c[Admin]'
     suffix: '&f'
     inherit:
-    - Mod
+      Mod
+    # We can define wildcard permissions, even when other plugins don't explicitly support
+    # them. This is achieved by placing a '*' at the point you wish to grant any descendant
+    # permissions. This can be dangerous if a plugin does not explicitly support wildcards,
+    # be sure to double-check the target plugin's permission inheritance to ensure you're
+    # only handing out permissions you intend to!
     permissions:
-    - essentials.*
+      some_plugin.*
+
+  # Example of an owner group given all permissions
   owner:
     prefix: '&6[Owner]'
     suffix: '&f'
+    # We can define a true wildcard permission with a simple '*'. This grants members of this
+    # group all permissions, acting as a bypass on all permission checks. This is to say that
+    # members of this group will effectively not be checked for having permissions, instead
+    # being given carte-blanche to perform any action or command
     permissions:
-    - '*'
+      *
+
+# Rank ladder lists allow you to quickly /promote and /demote users within the first ladder
+# where they have a group defined. You can optionally provide a ladder name to promote/demote
+# a user within when using the /promote and /demote commands to avoid the plugin choosing the
+# ladder to move a player within.
+ladders:
+  default:
+    - default
+    - mod
+    - admin
+    - owner
