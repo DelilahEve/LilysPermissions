@@ -30,7 +30,7 @@ tasks.getByName<Test>("test") {
 // Fat-jar builder
 val fatJar = tasks.register<Jar>("fatJar") {
     manifest {
-        attributes.apply { put("Main-Class", "io.delilaheve.LilysPerms") }
+        attributes.apply { put("Main-Class", "io.delilaheve.LilysPermissions") }
     }
     archiveFileName.set("${rootProject.name}-${version}.jar")
     exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")

@@ -1,2 +1,2 @@
-rootProject.name = "LilysPerms"
+rootProject.name = "LilysPermissions"
 
