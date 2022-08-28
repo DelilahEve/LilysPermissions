@@ -2,17 +2,28 @@
 # Note that once a player is given a non-default role they will be recorded
 # in users.yml and this setting is only in regard to players with only a
 # default group.
+#
+# It's recommended to turn this off for very large servers.
 save_all_players: true
+
+# Toggle player name formatting
+chat_formatting: true
 
 # What "mode" should a user's prefix operate in? Valid options are:
 #
 # override - This will result in the prefix a user is given in users.yml
 #            replacing the prefix given to them by their assigned group
 #
-# add      - This will result in the prefix a user is given in users.yml
+# combine  - This will result in the prefix a user is given in users.yml
 #            being placed before the group's prefix
 user_prefix_mode: override
 
 # What "mode" should a user's suffix operate in? Valid options are
 # the same as prefix modes.
 user_suffix_mode: override
+
+# Whether a space should be inserted after the prefix and before the player's name
+space_after_prefix: true
+
+# Whether a space should be inserted after the player's name and before the suffix
+space_before_suffix: true

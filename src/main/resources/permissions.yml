@@ -116,9 +116,11 @@ groups:
 # where they have a group defined. You can optionally provide a ladder name to promote/demote
 # a user within when using the /promote and /demote commands to avoid the plugin choosing the
 # ladder to move a player within.
+#
+# Ladders should be organized ascending.
 ladders:
   default:
-    - default
-    - mod
-    - admin
-    - owner
+    default
+    mod
+    admin
+    owner

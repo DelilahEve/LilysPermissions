@@ -5,11 +5,25 @@ author: DelilahEve
 main: io.delilaheve.LilysPermissions
 commands:
   promote:
-    description: promote a user within a ladder
-    usage: /promote <user> [ladder]
+    description: promote a player within a ladder
+    usage: /promote <player> [ladder]
+    permission: lilys_permissions.promote
   demote:
-    description: demote a user within a ladder
-    usage: /demote <user> [ladder]
+    description: demote a player within a ladder
+    usage: /demote <player> [ladder]
+    permission: lilys_permissions.demote
+  set-group:
+    description: set a player's group(s)
+    usage: /set-group <player> <group> [group2...]
+    permission: lilys_permissions.set_group
+  add-group:
+    description: add group(s) to a player
+    usage: /add-group <player> <group> [group2...]
+    permission: lilys_permissions.add_group
+  lp-reload:
+    description: reload plugin configurations
+    usage: /lp-reload
+    permission: lilys_permissions.reload
 permissions:
   lilys_permissions.*:
     children:
@@ -18,4 +32,13 @@ permissions:
         default: op
       lilys_permissions.demote:
         description: Permits use of the /demote command
+        default: op
+      lilys_permissions.set_group:
+        description: Permits use of the /set-group command
+        default: op
+      lilys_permissions.add_group:
+        description: Permits use of the /add-group command
+        default: op
+      lilys_permissions.reload:
+        description: Permits use of the /lp-reload command
         default: op
