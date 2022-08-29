@@ -6,6 +6,23 @@
 # Users who are given non-default groups are automatically recorded here and
 # should not be removed otherwise the plugin will forget any groups they've
 # been assigned.
+#
+# If you wish to use colours/formatting you may use any of these replacement keys:
+#
+# Black ---------- &0    Green ------------ &a    Italic --------- &o
+# Dark Blue ------ &1    Aqua ------------- &b    Reset ---------- &r
+# Dark Green ----- &2    Red -------------- &c
+# Dark Aqua ------ &3    Light Purple ----- &d
+# Dark Red ------- &4    Yellow ----------- &e
+# Dark Purple ---- &5    White ------------ &f
+# Gold ----------- &6    Magic ------------ &k
+# Gray ----------- &7    Bold ------------- &l
+# Dark Gray ------ &8    Strikethrough ---- &m
+# Blue ----------- &9    Underline -------- &n
+#
+# These formatting keys are Bukkit's ChatColor values and can be found in their
+# documentation. These values are standard to all Bukkit-based servers including
+# Spigot and Paper.
 users:
 
   # User's entry, should be their UUID. If you need to find a UUID for a player
@@ -19,9 +36,9 @@ users:
       netherDefault
       admin
     # Prefix this user should have instead of their group's
-    prefix: &a[Upside Down]
+    prefix: "&k[Upside Down]"
     # Suffix this user should have instead of their group's
-    suffix: &f
+    suffix: "&r"
     # Permissions this user should be given in addition to their group's
     permissions:
       upsidedown.allow

@@ -1,5 +1,7 @@
 package io.delilaheve.data
 
+import java.util.*
+
 /**
  * Model representing a permissions user
  *
@@ -9,6 +11,7 @@ package io.delilaheve.data
  * @param permissions User's permission overrides
  */
 data class User(
+    val uuid: UUID,
     val prefix: String,
     val suffix: String,
     val groups: List<String>,

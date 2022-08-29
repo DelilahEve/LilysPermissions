@@ -6,6 +6,7 @@ import io.delilaheve.ConfigOptions.PrefixSuffixModes.OVERRIDE
 import io.delilaheve.LilysPermissions.Companion.USERS_FILE
 import io.delilaheve.data.Group
 import io.delilaheve.data.User
+import io.delilaheve.util.ColourUtil.colourise
 import io.delilaheve.util.GroupUtil.allPermissions
 import io.delilaheve.util.GroupUtil.asGroup
 import io.delilaheve.util.GroupUtil.highestRanked
@@ -14,6 +15,8 @@ import io.delilaheve.util.YamlUtil.readUser
 import io.delilaheve.util.YamlUtil.setUserGroupNames
 import io.delilaheve.util.YamlUtil.trySave
 import io.delilaheve.util.YamlUtil.userGroupNames
+import io.delilaheve.util.YamlUtil.writeUser
+import org.bukkit.ChatColor
 import org.bukkit.World
 import org.bukkit.entity.Player
 import org.bukkit.permissions.PermissionAttachment
@@ -94,7 +97,7 @@ object PlayerUtil {
         if (ConfigOptions.spaceBeforeSuffix) {
             suffix = " $suffix"
         }
-        setDisplayName("$prefix$name$suffix")
+        setDisplayName("$prefix$name$suffix".colourise())
     }
 
     /**
@@ -120,6 +123,14 @@ object PlayerUtil {
         groupNames: List<String>
     ): Boolean = YamlUtil.getFile(USERS_FILE)?.let {
         it.setUserGroupNames(uniqueId, groupNames)
+        it.trySave(USERS_FILE)
+    } ?: false
+
+    /**
+     * Save this [User] to the [USERS_FILE]
+     */
+    fun User.save() = YamlUtil.getFile(USERS_FILE)?.let {
+        it.writeUser(this)
         it.trySave(USERS_FILE)
     } ?: false
 

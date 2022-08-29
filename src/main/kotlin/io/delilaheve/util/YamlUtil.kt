@@ -1,6 +1,7 @@
 package io.delilaheve.util
 
 import io.delilaheve.LilysPermissions
+import io.delilaheve.LilysPermissions.Companion.USERS_FILE
 import io.delilaheve.data.Group
 import io.delilaheve.data.GroupWorldOverride
 import io.delilaheve.data.Ladder
@@ -37,7 +38,12 @@ object YamlUtil {
         val file = LilysPermissions.instance
             ?.let { File(it.dataFolder, name) }
             ?: return null
-        return YamlConfiguration.loadConfiguration(file)
+        return try {
+            YamlConfiguration.loadConfiguration(file)
+        } catch (e: Exception) {
+            LogUtil.warn("$name contains invalid YAML, failed to load.")
+            null
+        }
     }
 
     /**
@@ -109,17 +115,32 @@ object YamlUtil {
         world: World
     ): User = getConfigurationSection("$PATH_USERS.$uuid")?.let {
         User(
+            uuid = uuid,
             prefix = getString(PATH_PREFIX) ?: DEFAULT_STRING,
             suffix = getString(PATH_SUFFIX) ?: DEFAULT_STRING,
             groups = getStringList(PATH_GROUPS),
             permissions = getStringList(PATH_PERMISSIONS)
         )
     } ?: User(
+        uuid = uuid,
         prefix = DEFAULT_STRING,
         suffix = DEFAULT_STRING,
         groups = listOf(GroupUtil.defaultGroup(world).name),
         permissions = emptyList()
     )
+
+    /**
+     * Save a user to this [YamlConfiguration]
+     */
+    fun YamlConfiguration.writeUser(
+        user: User
+    ) {
+        val basePath = "$PATH_USERS.${user.uuid}"
+        set("$basePath.$PATH_PREFIX", user.prefix)
+        set("$basePath.$PATH_SUFFIX", user.suffix)
+        set("$basePath.$PATH_GROUPS", user.groups)
+        set("$basePath.$PATH_PERMISSIONS", user.permissions)
+    }
 
     /**
      * Get a list of group names from this [YamlConfiguration] for the user with the given [uuid]

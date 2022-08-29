@@ -13,6 +13,23 @@
 # one. This means if you assign a world-specific role (i.e. a creative world
 # role) to a user with a more broad role (one that applies to any role),
 # the one to come later in the list will be the one to take precedent.
+#
+# If you wish to use colours/formatting you may use any of these replacement keys:
+#
+# Black ---------- &0    Green ------------ &a    Italic --------- &o
+# Dark Blue ------ &1    Aqua ------------- &b    Reset ---------- &r
+# Dark Green ----- &2    Red -------------- &c
+# Dark Aqua ------ &3    Light Purple ----- &d
+# Dark Red ------- &4    Yellow ----------- &e
+# Dark Purple ---- &5    White ------------ &f
+# Gold ----------- &6    Magic ------------ &k
+# Gray ----------- &7    Bold ------------- &l
+# Dark Gray ------ &8    Strikethrough ---- &m
+# Blue ----------- &9    Underline -------- &n
+#
+# These formatting keys are Bukkit's ChatColor values and can be found in their
+# documentation. These values are standard to all Bukkit-based servers including
+# Spigot and Paper.
 groups:
 
   # Example of a default group, this will be the group given to
@@ -22,11 +39,11 @@ groups:
     # Only the first group defined with this will be treated as default.
     default: true
     # Chat prefix to be displayed for users in this group, supports colour coding.
-    prefix: &a[Default]
-    # Chat suffix to be displayed for users in this group. Recommended to have
-    # &f as the final text here as that will return the player's text to the normal
-    # white colour, without &f the player's text will be coloured as per the prefix.
-    suffix: &f
+    prefix: "&a[Default]"
+    # Chat suffix to be displayed for users in this group. It's recommended to have
+    # &r as the final text here as that will return the player's text to the normal
+    # white colour, without &r the player's text will be coloured as per the prefix.
+    suffix: "&r"
     # list of permissions given to this group's members.
     permissions:
       some_plugin.basic_permission
@@ -40,8 +57,8 @@ groups:
     # In addition to supporting 'true', default can be set to a world name. This
     # is how we achieve defaults for alternate worlds.
     default: world_nether
-    prefix: &4[Nether-Default]
-    suffix: &f
+    prefix: "&4[Nether-Default]"
+    suffix: "&r"
     # We can define an 'inherit' node and specify the names of groups we wish to
     # inherit permissions, prefixes, and suffixes from. Permission lists will be
     # merged, and prefix/suffix will only be inherited if not explicitly defined.
@@ -56,8 +73,8 @@ groups:
   # this one, and that role can be applied to the world(s) listed, that role will
   # take precedent.
   worldSpecificGroup:
-    prefix: &3[world only group]
-    suffix: &f
+    prefix: "&3[world only group]"
+    suffix: "&r"
     # We can define a worlds node to specify which worlds this group can be applied in.
     # If not defined, the group will be assumed to be globally available.
     worlds:
@@ -67,20 +84,20 @@ groups:
 
   # Example of a moderator role whose permissions and prefix/suffix are defined per-world.
   mod:
-    prefix: &b[Mod]
-    suffix: &f
+    prefix: "&2[Mod]"
+    suffix: "&r"
     inherit:
       default
     # We can define a node with the name of a world to override prefix, suffix, and permissions
     # when the player is in that world:
     world:
-      prefix: &b[World Mod]
-      suffix: &a
+      prefix: "&2[World Mod]"
+      suffix: "&r"
       permissions:
         some.world.permission
     world_nether:
-      prefix: &b[Nether Mod]
-      suffix: &c
+      prefix: "&4[Nether Mod]"
+      suffix: "&r"
       permissions:
         some.nether.permission
     # We can still define global permissions for this group in addition to world-specific ones:
@@ -89,8 +106,8 @@ groups:
 
   # Example of an admin group given a wildcard permission
   admin:
-    prefix: '&c[Admin]'
-    suffix: '&f'
+    prefix: "&c[Admin]"
+    suffix: "&r"
     inherit:
       Mod
     # We can define wildcard permissions, even when other plugins don't explicitly support
@@ -99,18 +116,18 @@ groups:
     # be sure to double-check the target plugin's permission inheritance to ensure you're
     # only handing out permissions you intend to!
     permissions:
-      some_plugin.*
+      "some_plugin.*"
 
   # Example of an owner group given all permissions
   owner:
-    prefix: '&6[Owner]'
-    suffix: '&f'
+    prefix: "&d[Owner]"
+    suffix: "&r"
     # We can define a true wildcard permission with a simple '*'. This grants members of this
     # group all permissions, acting as a bypass on all permission checks. This is to say that
     # members of this group will effectively not be checked for having permissions, instead
     # being given carte-blanche to perform any action or command
     permissions:
-      *
+      "*"
 
 # Rank ladder lists allow you to quickly /promote and /demote users within the first ladder
 # where they have a group defined. You can optionally provide a ladder name to promote/demote
