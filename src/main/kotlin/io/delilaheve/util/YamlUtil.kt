@@ -75,7 +75,7 @@ object YamlUtil {
                 inherit = it.getStringList(PATH_INHERIT),
                 worlds = it.getStringList(PATH_WORLDS),
                 permissions = it.getStringList(PATH_PERMISSIONS),
-                worldOverrides = findWorldOverrides()
+                worldOverrides = it.findWorldOverrides()
             )
         }
     }
