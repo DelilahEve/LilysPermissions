@@ -101,6 +101,8 @@ object PlayerUtil {
 
     /**
      * Add all [groupNames] to this [Player]'s groups
+     *
+     * ToDo - Update user's permissions when groups change
      */
     fun Player.addGroups(
         groupNames: List<String>
@@ -116,7 +118,7 @@ object PlayerUtil {
     /**
      * Attempt to set a [Player]'s [groups], overwriting any previous groups
      *
-     * Returns true if successful
+     * ToDo - Update user's permissions when groups change
      */
     fun Player.setGroups(
         groupNames: List<String>
