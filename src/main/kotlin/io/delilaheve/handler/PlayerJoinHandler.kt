@@ -1,7 +1,9 @@
 package io.delilaheve.handler
 
 import io.delilaheve.ConfigOptions
+import io.delilaheve.exception.DefaultGroupMissing
 import io.delilaheve.manager.PlayerManager
+import io.delilaheve.util.LogUtil
 import io.delilaheve.util.PlayerUtil.getUserPermissions
 import io.delilaheve.util.PlayerUtil.save
 import org.bukkit.event.EventHandler
@@ -19,7 +21,13 @@ class PlayerJoinHandler : Listener {
      */
     @EventHandler(priority = HIGHEST)
     fun onPlayerJoin(event: PlayerJoinEvent) {
-        PlayerManager.attachPlayer(event.player)
+        try {
+            PlayerManager.attachPlayer(event.player)
+        } catch (e: Exception) {
+            if (e is DefaultGroupMissing) {
+                e.message?.let { LogUtil.warn(it) }
+            }
+        }
         if (ConfigOptions.saveAll) {
             event.player
                 .getUserPermissions(event.player.world)
