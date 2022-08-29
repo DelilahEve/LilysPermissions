@@ -6,6 +6,7 @@ import io.delilaheve.ConfigOptions.PrefixSuffixModes.OVERRIDE
 import io.delilaheve.LilysPermissions.Companion.USERS_FILE
 import io.delilaheve.data.Group
 import io.delilaheve.data.User
+import io.delilaheve.manager.PlayerManager
 import io.delilaheve.util.ColourUtil.colourise
 import io.delilaheve.util.GroupUtil.allPermissions
 import io.delilaheve.util.GroupUtil.asGroup
@@ -101,8 +102,6 @@ object PlayerUtil {
 
     /**
      * Add all [groupNames] to this [Player]'s groups
-     *
-     * ToDo - Update user's permissions when groups change
      */
     fun Player.addGroups(
         groupNames: List<String>
@@ -112,19 +111,21 @@ object PlayerUtil {
             .apply { addAll(groupNames) }
             .distinct()
         it.setUserGroupNames(uniqueId, newGroupNames)
-        it.trySave(USERS_FILE)
+        val result = it.trySave(USERS_FILE)
+        PlayerManager.updatePlayer(this)
+        result
     } ?: false
 
     /**
      * Attempt to set a [Player]'s [groups], overwriting any previous groups
-     *
-     * ToDo - Update user's permissions when groups change
      */
     fun Player.setGroups(
         groupNames: List<String>
     ): Boolean = YamlUtil.getFile(USERS_FILE)?.let {
         it.setUserGroupNames(uniqueId, groupNames)
-        it.trySave(USERS_FILE)
+        val result = it.trySave(USERS_FILE)
+        PlayerManager.updatePlayer(this)
+        result
     } ?: false
 
     /**

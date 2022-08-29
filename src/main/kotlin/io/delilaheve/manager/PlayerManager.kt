@@ -81,4 +81,21 @@ object PlayerManager {
         }
     }
 
+    /**
+     * Update permissions for the given [player]
+     */
+    fun updatePlayer(player: Player) {
+        attachments[player]?.let {
+            it.permissions.forEach { (permission, granted) ->
+                if (granted) {
+                    it.unsetPermission(permission)
+                }
+            }
+            player.setActivePermissions(it)
+            if (ConfigOptions.chatFormatting) {
+                player.updateDisplayName()
+            }
+        }
+    }
+
 }
