@@ -1,12 +1,10 @@
 package io.delilaheve.util
 
 import io.delilaheve.LilysPermissions
-import io.delilaheve.LilysPermissions.Companion.USERS_FILE
 import io.delilaheve.data.Group
 import io.delilaheve.data.GroupWorldOverride
 import io.delilaheve.data.Ladder
 import io.delilaheve.data.User
-import io.delilaheve.exception.DefaultGroupMissing
 import org.bukkit.World
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
@@ -116,10 +114,10 @@ object YamlUtil {
     ): User = getConfigurationSection("$PATH_USERS.$uuid")?.let {
         User(
             uuid = uuid,
-            prefix = getString(PATH_PREFIX) ?: DEFAULT_STRING,
-            suffix = getString(PATH_SUFFIX) ?: DEFAULT_STRING,
-            groups = getStringList(PATH_GROUPS),
-            permissions = getStringList(PATH_PERMISSIONS)
+            prefix = it.getString(PATH_PREFIX) ?: DEFAULT_STRING,
+            suffix = it.getString(PATH_SUFFIX) ?: DEFAULT_STRING,
+            groups = it.getStringList(PATH_GROUPS),
+            permissions = it.getStringList(PATH_PERMISSIONS)
         )
     } ?: User(
         uuid = uuid,

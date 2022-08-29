@@ -80,6 +80,7 @@ object GroupUtil {
     /**
      * Get the highest ranked [Group] in this [List]
      */
-    fun List<Group>.highestRanked(): Group = allGroups().last { it in this }
+    fun List<Group>.highestRanked(): Group? = allGroups().lastOrNull { it in this }
+        ?: firstOrNull()
 
 }

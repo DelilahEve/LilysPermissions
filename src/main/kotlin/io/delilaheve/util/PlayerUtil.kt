@@ -16,7 +16,6 @@ import io.delilaheve.util.YamlUtil.setUserGroupNames
 import io.delilaheve.util.YamlUtil.trySave
 import io.delilaheve.util.YamlUtil.userGroupNames
 import io.delilaheve.util.YamlUtil.writeUser
-import org.bukkit.ChatColor
 import org.bukkit.World
 import org.bukkit.entity.Player
 import org.bukkit.permissions.PermissionAttachment
@@ -78,7 +77,7 @@ object PlayerUtil {
      */
     fun Player.updateDisplayName() {
         val user = getUserPermissions(world) ?: return
-        val group = user.relevantGroups(world).highestRanked()
+        val group = highestGroup(world) ?: return
         var prefix = when (ConfigOptions.prefixMode) {
             COMBINE -> "${group.prefixFor(world)}${user.prefix}"
             OVERRIDE -> group.prefixFor(world)
