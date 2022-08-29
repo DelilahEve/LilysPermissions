@@ -54,8 +54,7 @@ object YamlUtil {
             val file = File(it.dataFolder, name)
             save(file)
             true
-        }
-        false
+        } ?: false
     } catch (e: Exception) {
         false
     }
