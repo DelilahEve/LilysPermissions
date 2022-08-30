@@ -37,7 +37,7 @@ object LadderUtil {
     fun firstLadderWithGroup(
         group: Group
     ): Ladder? = allLadders().firstOrNull {
-        it.groups.any { g -> g.equals(group.name, true) }
+        group.name in it.groups
     }
 
     /**
