@@ -35,7 +35,6 @@ object GroupUtil {
         world: World
     ): Group {
         val allGroups = allGroups()
-        LogUtil.info("${allGroups.size} groups loaded from $PERMISSIONS_FILE")
         return allGroups.firstOrNull { it.default.equals(world.name, true) }
             ?: allGroups.firstOrNull { it.default.equals(DEFAULT_GLOBAL_KEY, true) }
             ?: throw DefaultGroupMissing()
