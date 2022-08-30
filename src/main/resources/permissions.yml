@@ -1,11 +1,10 @@
-# All permissions groups must be defined in this "groups" node.
-# Any groups defined outside this node will be ignored.
-#
 # A note on reading this documentation: Players may at some points be
 # referred to as users, or members, and groups may at points be referred to
 # as roles  or ranks. I consider users and players the same thing, same for
 # groups, roles, and ranks. :)
 #
+# All permissions groups must be defined in this "groups" node.
+# Any groups defined outside this node will be ignored.
 # Groups should be defined in ascending order, meaning your lowest rank
 # should be defined first, and your highest rank last. When determining
 # permissions and chat formatting for players, if a conflict arises between
@@ -26,6 +25,10 @@
 # Gray ----------- &7    Bold ------------- &l
 # Dark Gray ------ &8    Strikethrough ---- &m
 # Blue ----------- &9    Underline -------- &n
+#
+# Use of replacement keys requires wrapping the entire string in "", otherwise
+# the YAML will fail to parse. If you need to validate your file you can use
+# http://www.yamllint.com/
 #
 # These formatting keys are Bukkit's ChatColor values and can be found in their
 # documentation. These values are standard to all Bukkit-based servers including
