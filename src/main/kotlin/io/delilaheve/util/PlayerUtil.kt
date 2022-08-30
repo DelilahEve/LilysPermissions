@@ -80,13 +80,13 @@ object PlayerUtil {
         val user = getUserPermissions(world) ?: return
         val group = highestGroup(world) ?: return
         var prefix = when (ConfigOptions.prefixMode) {
-            COMBINE -> "${group.prefixFor(world)}${user.prefix}"
+            COMBINE -> "${user.prefix}${group.prefixFor(world)}"
             OVERRIDE -> group.prefixFor(world)
                 .takeIf { user.prefix.isEmpty() }
                 ?: user.prefix
         }
         var suffix = when (ConfigOptions.suffixMode) {
-            COMBINE -> "${group.suffixFor(world)}${user.suffix}"
+            COMBINE -> "${user.suffix}${group.suffixFor(world)}"
             OVERRIDE -> group.suffixFor(world)
                 .takeIf { user.suffix.isEmpty() }
                 ?: user.suffix
