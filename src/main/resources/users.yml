@@ -3,6 +3,7 @@
 #
 # Users do not have to be recorded here if they're only being given default
 # permissions (though you can configure the plugin such that all players are).
+#
 # Users who are given non-default groups are automatically recorded here and
 # should not be removed otherwise the plugin will forget any groups they've
 # been assigned.
@@ -20,6 +21,10 @@
 # Dark Gray ------ &8    Strikethrough ---- &m
 # Blue ----------- &9    Underline -------- &n
 #
+# Use of replacement keys requires wrapping the entire string in "", otherwise
+# the YAML will fail to parse. If you need to validate your file you can use
+# http://www.yamllint.com/
+#
 # These formatting keys are Bukkit's ChatColor values and can be found in their
 # documentation. These values are standard to all Bukkit-based servers including
 # Spigot and Paper.
@@ -29,7 +34,9 @@ users:
   # to manually add them, you can use: https://mcuuid.net/
   #
   # This entry is for Dinnerbone, and whilst it's a very low chance he'd join
-  # your server at random, it'd be good security to remove this entry.
+  # your server at random, it'd be good security to remove this entry as it's
+  # only for demonstration. If you do remove it, place [] after the "users" node
+  # to ensure the file formatting remains valid.
   61699b2e-d327-4a01-9f1e-0ea8c3f06bc6:
     # Groups this user is part of
     groups:
