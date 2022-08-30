@@ -13,14 +13,14 @@ import org.bukkit.World
 object GroupUtil {
 
     // String to search for to indicate a default group is globally applied
-    private const val DEFAULT_GLOBAL_KEY = "true"
+    const val DEFAULT_GLOBAL_KEY = "true"
 
     /**
      * Get a list of all defined [Group]s in the [PERMISSIONS_FILE]
      *
      * This list will, by default, be ordered ascending
      */
-    private fun allGroups(): List<Group> = YamlUtil.getFile(PERMISSIONS_FILE)
+    fun allGroups(): List<Group> = YamlUtil.getFile(PERMISSIONS_FILE)
         ?.getConfigurationSection(PATH_GROUPS)
         ?.getKeys(false)
         ?.mapNotNull { it.asGroup() }
@@ -38,6 +38,17 @@ object GroupUtil {
         return allGroups.firstOrNull { it.default.equals(world.name, true) }
             ?: allGroups.firstOrNull { it.default.equals(DEFAULT_GLOBAL_KEY, true) }
             ?: throw DefaultGroupMissing()
+    }
+
+    /**
+     * Get a list of all default [Group]s
+     */
+    fun allDefaults(): List<Group> {
+        val allWorlds = WorldUtil.getAllWorlds()
+            .map { it.name }
+        return allGroups().filter {
+            it.default in allWorlds || it.default == DEFAULT_GLOBAL_KEY
+        }
     }
 
     /**
