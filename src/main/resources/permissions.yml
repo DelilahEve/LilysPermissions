@@ -46,7 +46,7 @@ groups:
     suffix: "&r"
     # list of permissions given to this group's members.
     permissions:
-      some_plugin.basic_permission
+    - some_plugin.basic_permission
 
   # Example of a nether default group. This would be assigned as the default role
   # when a user's first joined world is the nether (as opposed to the over-world)
@@ -63,9 +63,9 @@ groups:
     # inherit permissions, prefixes, and suffixes from. Permission lists will be
     # merged, and prefix/suffix will only be inherited if not explicitly defined.
     inherit:
-      default
+    - default
     permissions:
-      some_plugin.basic_permission
+    - some_plugin.basic_permission
 
   # Example of a world-specific group. This role and it's associated properties would
   # only be applied in the worlds listed, and will override any previously defined
@@ -78,45 +78,45 @@ groups:
     # We can define a worlds node to specify which worlds this group can be applied in.
     # If not defined, the group will be assumed to be globally available.
     worlds:
-      world_end
+    - world_end
     permissions:
-      some_plugin.basic_permission
+    - some_plugin.basic_permission
 
   # Example of a moderator role whose permissions and prefix/suffix are defined per-world.
   mod:
     prefix: "&2[Mod]"
     suffix: "&r"
     inherit:
-      default
+    - default
     # We can define a node with the name of a world to override prefix, suffix, and permissions
     # when the player is in that world:
     world:
       prefix: "&2[World Mod]"
       suffix: "&r"
       permissions:
-        some.world.permission
+      - some.world.permission
     world_nether:
       prefix: "&4[Nether Mod]"
       suffix: "&r"
       permissions:
-        some.nether.permission
+      - some.nether.permission
     # We can still define global permissions for this group in addition to world-specific ones:
     permissions:
-      global.permission
+    - global.permission
 
   # Example of an admin group given a wildcard permission
   admin:
     prefix: "&c[Admin]"
     suffix: "&r"
     inherit:
-      Mod
+    - mod
     # We can define wildcard permissions, even when other plugins don't explicitly support
     # them. This is achieved by placing a '*' at the point you wish to grant any descendant
     # permissions. This can be dangerous if a plugin does not explicitly support wildcards,
     # be sure to double-check the target plugin's permission inheritance to ensure you're
     # only handing out permissions you intend to!
     permissions:
-      "some_plugin.*"
+    - "some_plugin.*"
 
   # Example of an owner group given all permissions
   owner:
@@ -127,7 +127,7 @@ groups:
     # members of this group will effectively not be checked for having permissions, instead
     # being given carte-blanche to perform any action or command
     permissions:
-      "*"
+    - "*"
 
 # Rank ladder lists allow you to quickly /promote and /demote users within the first ladder
 # where they have a group defined. You can optionally provide a ladder name to promote/demote
@@ -137,7 +137,7 @@ groups:
 # Ladders should be organized ascending.
 ladders:
   default:
-    default
-    mod
-    admin
-    owner
+  - default
+  - mod
+  - admin
+  - owner
