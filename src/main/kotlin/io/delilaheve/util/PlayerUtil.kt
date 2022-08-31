@@ -12,6 +12,7 @@ import io.delilaheve.util.GroupUtil.allPermissions
 import io.delilaheve.util.GroupUtil.asGroup
 import io.delilaheve.util.GroupUtil.highestRanked
 import io.delilaheve.util.GroupUtil.relevantIn
+import io.delilaheve.util.PermissionsUtil.WILDCARD_PERMISSION
 import io.delilaheve.util.YamlUtil.readUser
 import io.delilaheve.util.YamlUtil.setUserGroupNames
 import io.delilaheve.util.YamlUtil.trySave
@@ -72,7 +73,7 @@ object PlayerUtil {
             .distinct()
             .toMutableList()
         // wildcard permission provides all registered permissions
-        if (permissions.contains("*")) {
+        if (permissions.contains(WILDCARD_PERMISSION)) {
             permissions.addAll(PermissionsUtil.allPermissionStrings)
         }
         permissions.forEach { attachment.setPermission(it, true) }
