@@ -3,6 +3,7 @@ package io.delilaheve.util
 import io.delilaheve.LilysPermissions.Companion.PERMISSIONS_FILE
 import io.delilaheve.data.Group
 import io.delilaheve.exception.DefaultGroupMissing
+import io.delilaheve.util.GroupUtil.allGroups
 import io.delilaheve.util.PermissionsUtil.WILDCARD_PERMISSION
 import io.delilaheve.util.YamlUtil.PATH_GROUPS
 import io.delilaheve.util.YamlUtil.readGroup
@@ -88,12 +89,14 @@ object GroupUtil {
             /* We loop all items to detect any wildcards and add their child permissions
              * because not all plugins support a wildcard permission, but we want to offer
              * it for as many as possible. */
+            val findChildrenFor = mutableListOf<String>()
             forEach {
                 // We want to be careful not to check for descendants of a true wildcard, as we won't find any
                 if (it != WILDCARD_PERMISSION && it.endsWith(WILDCARD_PERMISSION)) {
-                    addAll(PermissionsUtil.descendingPermissions(it))
+                    findChildrenFor.add(it)
                 }
             }
+            findChildrenFor.forEach { addAll(PermissionsUtil.descendingPermissions(it)) }
         }
         .distinct()
 
