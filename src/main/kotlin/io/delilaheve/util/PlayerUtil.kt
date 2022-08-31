@@ -64,13 +64,20 @@ object PlayerUtil {
     ) {
         val user = getUserPermissions(world) ?: return
         val groups = user.relevantGroups(world)
-        mutableListOf<String>()
+        val permissions = mutableListOf<String>()
             .apply {
                 addAll(user.permissions)
                 addAll(groups.allPermissions(world))
             }
             .distinct()
-            .forEach { attachment.setPermission(it, true) }
+            .toMutableList()
+        // wildcard permission provides all registered permissions
+        if (permissions.contains("*")) {
+            permissions.addAll(PermissionsUtil.allPermissionStrings)
+        }
+        permissions.forEach { attachment.setPermission(it, true) }
+        // ensure players has an up-to-date list of commands
+        updateCommands()
     }
 
     /**
