@@ -49,3 +49,6 @@ users:
     # Permissions this user should be given in addition to their group's
     permissions:
     - upsidedown.allow
+    # Permissions this user should be denied in addition to their group's
+    denyPermissions:
+    - rightsideup.allow

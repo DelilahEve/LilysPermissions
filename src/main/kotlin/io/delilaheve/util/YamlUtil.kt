@@ -26,6 +26,7 @@ object YamlUtil {
     private const val PATH_INHERIT = "inherit"
     private const val PATH_WORLDS = "worlds"
     private const val PATH_PERMISSIONS = "permissions"
+    private const val PATH_DENY_PERMISSIONS = "denyPermissions"
     // Default value for missing strings
     private const val DEFAULT_STRING = ""
 
@@ -74,6 +75,7 @@ object YamlUtil {
                 inherit = it.getStringList(PATH_INHERIT),
                 worlds = it.getStringList(PATH_WORLDS),
                 permissions = it.getStringList(PATH_PERMISSIONS),
+                denyPermissions = it.getStringList(PATH_DENY_PERMISSIONS),
                 worldOverrides = it.findWorldOverrides()
             )
         }
@@ -100,7 +102,8 @@ object YamlUtil {
     private fun ConfigurationSection.readWorldOverride() = GroupWorldOverride(
         prefix = getString(PATH_PREFIX) ?: DEFAULT_STRING,
         suffix = getString(PATH_SUFFIX) ?: DEFAULT_STRING,
-        permissions = getStringList(PATH_PERMISSIONS)
+        permissions = getStringList(PATH_PERMISSIONS),
+        denyPermissions = getStringList(PATH_DENY_PERMISSIONS)
     )
 
     /**
@@ -116,14 +119,16 @@ object YamlUtil {
             prefix = it.getString(PATH_PREFIX) ?: DEFAULT_STRING,
             suffix = it.getString(PATH_SUFFIX) ?: DEFAULT_STRING,
             groups = it.getStringList(PATH_GROUPS),
-            permissions = it.getStringList(PATH_PERMISSIONS)
+            permissions = it.getStringList(PATH_PERMISSIONS),
+            denyPermissions = it.getStringList(PATH_DENY_PERMISSIONS)
         )
     } ?: User(
         uuid = uuid,
         prefix = DEFAULT_STRING,
         suffix = DEFAULT_STRING,
         groups = listOf(GroupUtil.defaultGroup(world).name),
-        permissions = emptyList()
+        permissions = emptyList(),
+        denyPermissions = emptyList()
     )
 
     /**
@@ -137,6 +142,7 @@ object YamlUtil {
         set("$basePath.$PATH_SUFFIX", user.suffix)
         set("$basePath.$PATH_GROUPS", user.groups)
         set("$basePath.$PATH_PERMISSIONS", user.permissions)
+        set("$basePath.$PATH_DENY_PERMISSIONS", user.denyPermissions)
     }
 
     /**

@@ -131,6 +131,21 @@ groups:
     # being given carte-blanche to perform any action or command
     permissions:
     - "*"
+    # We can define a denyPermissions node to force-disable permissions. This is useful when you
+    # have a small number of permissions you don't want a group to have. Instead of listing off the
+    # hundreds of permissions you do want, you can simply deny the handful you don't want.
+    #
+    # Denied permissions do not support the '*' wildcard intentionally to avoid wasted processor cycles
+    # should it be used in the "permissions" list.
+    #
+    # Denied permissions will be applied after the permissions list, meaning they will overwrite any
+    # granted permissions, either from this group or inherited groups.
+    #
+    # Akin to the "permissions" list, this will inherit from any groups defined in the "inherit" list.
+    #
+    # The "denyPermissions" node can also be defined in a world override.
+    denyPermissions:
+    - some.permission
 
 # Rank ladder lists allow you to quickly /promote and /demote users within the first ladder
 # where they have a group defined. You can optionally provide a ladder name to promote/demote

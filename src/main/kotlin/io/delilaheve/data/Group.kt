@@ -5,13 +5,14 @@ import org.bukkit.World
 /**
  * Model representing a permissions group.
  *
- * @param name the group's name
+ * @param name the group's name.
  * @param default Can be "true" or a world name, determines if this group is a default group.
  * @param prefix Prefix string for members of this group.
  * @param suffix Suffix string for members of this group.
  * @param inherit List of groups this one should inherit [permissions] from.
  * @param worlds List of world names this group is applied to. Applies to all if empty.
- * @param permissions List of permission nodes granted to members of this group
+ * @param permissions List of permission nodes granted to members of this group.
+ * @param denyPermissions List of permission nodes denied to members of this group.
  * @param worldOverrides Map of [GroupWorldOverride]s that may change a member's prefix,
  *                       suffix, or permissions when they are in a world defined here.
  */
@@ -23,6 +24,7 @@ data class Group(
     val inherit: List<String>,
     val worlds: List<String>,
     val permissions: List<String>,
+    val denyPermissions: List<String>,
     val worldOverrides: Map<String, GroupWorldOverride>
 ) {
 
@@ -54,6 +56,17 @@ data class Group(
         ?.apply { addAll(permissions) }
         ?.distinct()
         ?: permissions
+
+    /**
+     * Determine the denied permissions to use in the given [world]
+     */
+    fun deniedPermissionsFor(
+        world: World
+    ) = worldOverrides[world.name]?.permissions
+        ?.toMutableList()
+        ?.apply { addAll(denyPermissions) }
+        ?.distinct()
+        ?: denyPermissions
 
     /**
      * Determine if this group is equivalent to [other]

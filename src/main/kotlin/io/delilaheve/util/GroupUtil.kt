@@ -3,7 +3,6 @@ package io.delilaheve.util
 import io.delilaheve.LilysPermissions.Companion.PERMISSIONS_FILE
 import io.delilaheve.data.Group
 import io.delilaheve.exception.DefaultGroupMissing
-import io.delilaheve.util.GroupUtil.allGroups
 import io.delilaheve.util.PermissionsUtil.WILDCARD_PERMISSION
 import io.delilaheve.util.YamlUtil.PATH_GROUPS
 import io.delilaheve.util.YamlUtil.readGroup
@@ -77,6 +76,16 @@ object GroupUtil {
     }
 
     /**
+     * Get all inherited denied permissions for this [Group]
+     */
+    private fun Group.inheritedDeniedPermissions(
+        world: World
+    ): List<String> {
+        val inheritedGroups = inherit.mapNotNull { it.asGroup() }
+        return inheritedGroups.allDeniedPermissions(world)
+    }
+
+    /**
      * Get all permissions for these [Group]s including their inherited permissions
      */
     fun List<Group>.allPermissions(
@@ -86,19 +95,41 @@ object GroupUtil {
         .apply {
             val inherited = this@allPermissions.flatMap { it.inheritedPermissions(world) }
             addAll(inherited)
-            /* We loop all items to detect any wildcards and add their child permissions
-             * because not all plugins support a wildcard permission, but we want to offer
-             * it for as many as possible. */
-            val findChildrenFor = mutableListOf<String>()
-            forEach {
-                // We want to be careful not to check for descendants of a true wildcard, as we won't find any
-                if (it != WILDCARD_PERMISSION && it.endsWith(WILDCARD_PERMISSION)) {
-                    findChildrenFor.add(it)
-                }
-            }
-            findChildrenFor.forEach { addAll(PermissionsUtil.descendingPermissions(it)) }
+            addImplicitChildren()
         }
         .distinct()
+
+    /**
+     * Get all denied permissions for these [Group]s including their inherited denied permissions
+     */
+    fun List<Group>.allDeniedPermissions(
+        world: World
+    ): List<String> = flatMap { it.deniedPermissionsFor(world) }
+        .toMutableList()
+        .apply {
+            val inherited = this@allDeniedPermissions.flatMap { it.inheritedDeniedPermissions(world) }
+            addAll(inherited)
+            addImplicitChildren()
+        }
+
+    /**
+     * Loop all items to detect any wildcards and add their child permissions
+     * because not all plugins support a wildcard permission, but we want to offer
+     * it for as many as possible.
+     *
+     * This doesn't guarantee we will successfully grab all permissions that should
+     * be children, but it does cover a fair number.
+     */
+    private fun MutableList<String>.addImplicitChildren() {
+        val findChildrenFor = mutableListOf<String>()
+        forEach {
+            // We want to be careful not to check for descendants of a true wildcard, as we won't find any
+            if (it != WILDCARD_PERMISSION && it.endsWith(WILDCARD_PERMISSION)) {
+                findChildrenFor.add(it)
+            }
+        }
+        findChildrenFor.forEach { addAll(PermissionsUtil.descendingPermissions(it)) }
+    }
 
     /**
      * Get the highest ranked [Group] in this [List]

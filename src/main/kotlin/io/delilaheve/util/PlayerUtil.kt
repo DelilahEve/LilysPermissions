@@ -8,6 +8,7 @@ import io.delilaheve.data.Group
 import io.delilaheve.data.User
 import io.delilaheve.manager.PlayerManager
 import io.delilaheve.util.ColourUtil.colourise
+import io.delilaheve.util.GroupUtil.allDeniedPermissions
 import io.delilaheve.util.GroupUtil.allPermissions
 import io.delilaheve.util.GroupUtil.asGroup
 import io.delilaheve.util.GroupUtil.highestRanked
@@ -77,6 +78,14 @@ object PlayerUtil {
             permissions.addAll(PermissionsUtil.allPermissionStrings)
         }
         permissions.forEach { attachment.setPermission(it, true) }
+        val denyPermissions = mutableListOf<String>()
+            .apply {
+                addAll(user.denyPermissions)
+                addAll(groups.allDeniedPermissions(world))
+            }
+            .distinct()
+            .toMutableList()
+        denyPermissions.forEach { attachment.setPermission(it, false) }
         // ensure players has an up-to-date list of commands
         updateCommands()
     }

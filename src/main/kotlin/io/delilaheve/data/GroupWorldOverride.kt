@@ -8,9 +8,12 @@ package io.delilaheve.data
  * @param suffix Suffix string override.
  * @param permissions List of permission strings to be given when the associated
  *                    user(s) are in the world this is set for.
+ * @param denyPermissions List of permission strings to be explicitly denied when
+ *                        the associated user(s) are in the world this is set for.
  */
 data class GroupWorldOverride(
     val prefix: String,
     val suffix: String,
-    val permissions: List<String>
+    val permissions: List<String>,
+    val denyPermissions: List<String>
 )
