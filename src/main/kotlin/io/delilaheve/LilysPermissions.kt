@@ -2,6 +2,7 @@ package io.delilaheve
 
 import io.delilaheve.handler.PlayerJoinHandler
 import io.delilaheve.handler.PlayerLeaveHandler
+import io.delilaheve.handler.WorldChangeHandler
 import io.delilaheve.manager.CommandManager
 import io.delilaheve.manager.PlayerManager
 import io.delilaheve.util.GroupUtil
@@ -82,7 +83,8 @@ class LilysPermissions : JavaPlugin() {
     private fun registerHandlers() {
         listOf(
             PlayerJoinHandler(),
-            PlayerLeaveHandler()
+            PlayerLeaveHandler(),
+            WorldChangeHandler()
         ).forEach { server.pluginManager.registerEvents(it, this) }
     }
 
