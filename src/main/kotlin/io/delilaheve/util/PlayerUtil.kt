@@ -77,18 +77,27 @@ object PlayerUtil {
         if (permissions.contains(WILDCARD_PERMISSION)) {
             permissions.addAll(PermissionsUtil.allPermissionStrings)
         }
-        permissions.forEach { attachment.setPermission(it, true) }
+        permissions.forEach { attachment.setPermission(it) }
+        LogUtil.info("$displayName granted ${permissions.size} permissions")
         val denyPermissions = mutableListOf<String>()
             .apply {
                 addAll(user.denyPermissions)
                 addAll(groups.allDeniedPermissions(world))
             }
             .distinct()
-            .toMutableList()
-        denyPermissions.forEach { attachment.setPermission(it, false) }
+        denyPermissions.forEach { attachment.unsetPermission(it) }
+        LogUtil.info("$displayName denied ${denyPermissions.size} permissions")
         // ensure players has an up-to-date list of commands
         updateCommands()
     }
+
+    /**
+     * Shorthand to set a permission because for some stupid reason the "value"
+     * boolean on setPermission gets fucking ignored when checking with hasPermission?? Imagine.
+     */
+    private fun PermissionAttachment.setPermission(
+        permission: String
+    ) = setPermission(permission, true)
 
     /**
      * Update this [Player]'s display name as defined in configurations
