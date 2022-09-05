@@ -40,7 +40,7 @@ val fatJar = tasks.register<Jar>("fatJar") {
     with(tasks.jar.get() as CopySpec)
 }
 
-// Ensure fatJar and copyJar are run
+// Ensure fatJar is run
 tasks.getByName("build") {
     dependsOn(fatJar)
 }
