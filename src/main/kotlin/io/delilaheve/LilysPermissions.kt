@@ -123,6 +123,8 @@ class LilysPermissions : JavaPlugin() {
         }
         // loading the users file will log a warning if there are errors, we don't need to log anything here
         YamlUtil.getFile(USERS_FILE)
+        // Touch the ConfigOptions object to ensure it loads and applies any config upgrades if needed
+        ConfigOptions
     }
 
 }
