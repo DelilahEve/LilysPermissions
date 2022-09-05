@@ -9,6 +9,17 @@ save_all_players: true
 # Toggle player name formatting
 chat_formatting: true
 
+# Whether the plugin should alter display names in the player list (tab list)
+tab_list_formatting: true
+
+# Whether the plugin should only alter tab list names for whitelisted groups
+tab_list_restrict_groups: false
+
+# List of group names whose member's names should be altered in the tab list
+#
+# This list will only take effect if "tab_list_restrict_groups" is true
+tab_list_groups: []
+
 # What "mode" should a user's prefix operate in? Valid options are:
 #
 # override - This will result in the prefix a user is given in users.yml

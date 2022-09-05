@@ -124,28 +124,40 @@ object PlayerUtil {
     /**
      * Update this [Player]'s display name as defined in configurations
      */
-    fun Player.updateDisplayName() {
-        val user = getUserPermissions(world) ?: return
-        val group = highestGroup(world) ?: return
-        var prefix = when (ConfigOptions.prefixMode) {
-            COMBINE -> "${user.prefix}${group.prefixFor(world)}"
-            OVERRIDE -> group.prefixFor(world)
-                .takeIf { user.prefix.isEmpty() }
-                ?: user.prefix
+    fun Player.updateDisplayNames() {
+        permissionsScope.launch {
+            val user = getUserPermissions(world) ?: return@launch
+            val group = highestGroup(world) ?: return@launch
+            var prefix = when (ConfigOptions.prefixMode) {
+                COMBINE -> "${user.prefix}${group.prefixFor(world)}"
+                OVERRIDE -> group.prefixFor(world)
+                    .takeIf { user.prefix.isEmpty() }
+                    ?: user.prefix
+            }
+            var suffix = when (ConfigOptions.suffixMode) {
+                COMBINE -> "${user.suffix}${group.suffixFor(world)}"
+                OVERRIDE -> group.suffixFor(world)
+                    .takeIf { user.suffix.isEmpty() }
+                    ?: user.suffix
+            }
+            if (ConfigOptions.spaceAfterPrefix) {
+                prefix = "$prefix "
+            }
+            if (ConfigOptions.spaceBeforeSuffix) {
+                suffix = " $suffix"
+            }
+            val displayNameAs = "$prefix$name$suffix".colourise()
+            if (ConfigOptions.chatFormatting) {
+                setDisplayName(displayNameAs)
+            }
+            if (ConfigOptions.tabFormatting) {
+                val restrictedAndInGroup = ConfigOptions.tabRestrictions
+                        && group.name in ConfigOptions.tabListGroups
+                if (!ConfigOptions.tabRestrictions || restrictedAndInGroup) {
+                    setPlayerListName(displayNameAs)
+                }
+            }
         }
-        var suffix = when (ConfigOptions.suffixMode) {
-            COMBINE -> "${user.suffix}${group.suffixFor(world)}"
-            OVERRIDE -> group.suffixFor(world)
-                .takeIf { user.suffix.isEmpty() }
-                ?: user.suffix
-        }
-        if (ConfigOptions.spaceAfterPrefix) {
-            prefix = "$prefix "
-        }
-        if (ConfigOptions.spaceBeforeSuffix) {
-            suffix = " $suffix"
-        }
-        setDisplayName("$prefix$name$suffix".colourise())
     }
 
     /**

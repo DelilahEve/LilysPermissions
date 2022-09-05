@@ -23,6 +23,7 @@ class LilysPermissions : JavaPlugin() {
         // Additional configuration files
         const val PERMISSIONS_FILE = "permissions.yml"
         const val USERS_FILE = "users.yml"
+        const val CONFIG_FILE = "config.yml"
 
         // Warning for when a configuration might be in error, but the plugin can still function in some capacity
         private const val WARNING_NOT_INTENDED: String

@@ -1,10 +1,9 @@
 package io.delilaheve.manager
 
-import io.delilaheve.ConfigOptions
 import io.delilaheve.LilysPermissions
 import io.delilaheve.util.PlayerUtil.removeActivePermissions
 import io.delilaheve.util.PlayerUtil.setActivePermissions
-import io.delilaheve.util.PlayerUtil.updateDisplayName
+import io.delilaheve.util.PlayerUtil.updateDisplayNames
 import org.bukkit.entity.Player
 import org.bukkit.permissions.PermissionAttachment
 import org.bukkit.plugin.Plugin
@@ -28,7 +27,7 @@ object PlayerManager {
         pluginInstance?.let { player.addAttachment(it) }
             ?.let { attachments[player] = it }
         attachments[player]?.let { player.setActivePermissions(it) }
-        if (ConfigOptions.chatFormatting) { player.updateDisplayName() }
+        player.updateDisplayNames()
     }
 
     /**
@@ -66,7 +65,7 @@ object PlayerManager {
         attachments.forEach { (player, attachment) ->
             attachment.removeActivePermissions()
             player.setActivePermissions(attachment)
-            if (ConfigOptions.chatFormatting) { player.updateDisplayName() }
+            player.updateDisplayNames()
         }
     }
 
@@ -77,7 +76,7 @@ object PlayerManager {
         attachments[player]?.let {
             it.removeActivePermissions()
             player.setActivePermissions(it)
-            if (ConfigOptions.chatFormatting) { player.updateDisplayName() }
+            player.updateDisplayNames()
         }
     }
 
