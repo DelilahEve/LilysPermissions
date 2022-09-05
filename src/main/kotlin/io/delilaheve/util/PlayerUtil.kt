@@ -19,6 +19,10 @@ import io.delilaheve.util.YamlUtil.setUserGroupNames
 import io.delilaheve.util.YamlUtil.trySave
 import io.delilaheve.util.YamlUtil.userGroupNames
 import io.delilaheve.util.YamlUtil.writeUser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.newSingleThreadContext
 import org.bukkit.World
 import org.bukkit.entity.Player
 import org.bukkit.permissions.PermissionAttachment
@@ -27,6 +31,17 @@ import org.bukkit.permissions.PermissionAttachment
  * Set of functions and variables intended to ease [Player] management
  */
 object PlayerUtil {
+
+    /**
+     * When a server gets busy, the permissions calculations can take quite a bit of
+     * cpu power, especially if there are hundreds or thousands of defined permission
+     * nodes. As such, we're best off to move the calculations to another thread, then
+     * set them after the calculation is complete.
+     */
+    @OptIn(DelicateCoroutinesApi::class)
+    val permissionsScope by lazy {
+        CoroutineScope(newSingleThreadContext("permissionsScope"))
+    }
 
     /**
      * Get this [Player]'s permissions overrides, we include the current [world]
@@ -64,31 +79,38 @@ object PlayerUtil {
     fun Player.setActivePermissions(
         attachment: PermissionAttachment
     ) {
-        val user = getUserPermissions(world) ?: return
-        val groups = user.relevantGroups(world)
-        val permissions = mutableListOf<String>()
-            .apply {
-                addAll(user.permissions)
-                addAll(groups.allPermissions(world))
-            }
-            .distinct()
-            .toMutableList()
-        // wildcard permission provides all registered permissions
-        if (permissions.contains(WILDCARD_PERMISSION)) {
-            permissions.addAll(PermissionsUtil.allPermissionStrings)
+        permissionsScope.launch {
+            val user = getUserPermissions(world) ?: return@launch
+            val groups = user.relevantGroups(world)
+            val denyPermissions = mutableListOf<String>()
+                .apply {
+                    addAll(user.denyPermissions)
+                    addAll(groups.allDeniedPermissions(world))
+                }
+            mutableListOf<String>()
+                .apply {
+                    addAll(user.permissions)
+                    addAll(groups.allPermissions(world))
+                    if (contains(WILDCARD_PERMISSION)) {
+                        removeIf { it == WILDCARD_PERMISSION }
+                        addAll(PermissionsUtil.allPermissionStrings)
+                    }
+                    removeAll { it in denyPermissions }
+                }
+                .forEach { attachment.setPermission(it) }
+            updateCommands()
         }
-        permissions.forEach { attachment.setPermission(it) }
-        LogUtil.info("$displayName granted ${permissions.size} permissions")
-        val denyPermissions = mutableListOf<String>()
-            .apply {
-                addAll(user.denyPermissions)
-                addAll(groups.allDeniedPermissions(world))
+    }
+
+    /**
+     * Remove active permissions from this [PermissionAttachment]
+     */
+    fun PermissionAttachment.removeActivePermissions() {
+        permissionsScope.launch {
+            permissions.forEach { (permission, _) ->
+                unsetPermission(permission)
             }
-            .distinct()
-        denyPermissions.forEach { attachment.unsetPermission(it) }
-        LogUtil.info("$displayName denied ${denyPermissions.size} permissions")
-        // ensure players has an up-to-date list of commands
-        updateCommands()
+        }
     }
 
     /**

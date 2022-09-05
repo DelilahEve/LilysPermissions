@@ -2,6 +2,7 @@ package io.delilaheve.manager
 
 import io.delilaheve.ConfigOptions
 import io.delilaheve.LilysPermissions
+import io.delilaheve.util.PlayerUtil.removeActivePermissions
 import io.delilaheve.util.PlayerUtil.setActivePermissions
 import io.delilaheve.util.PlayerUtil.updateDisplayName
 import org.bukkit.entity.Player
@@ -27,9 +28,7 @@ object PlayerManager {
         pluginInstance?.let { player.addAttachment(it) }
             ?.let { attachments[player] = it }
         attachments[player]?.let { player.setActivePermissions(it) }
-        if (ConfigOptions.chatFormatting) {
-            player.updateDisplayName()
-        }
+        if (ConfigOptions.chatFormatting) { player.updateDisplayName() }
     }
 
     /**
@@ -37,11 +36,7 @@ object PlayerManager {
      */
     fun detachPlayer(player: Player) {
         attachments[player]?.let {
-            it.permissions.forEach { (permission, granted) ->
-                if (granted) {
-                    it.unsetPermission(permission)
-                }
-            }
+             it.removeActivePermissions()
             it.remove()
         }
     }
@@ -69,15 +64,9 @@ object PlayerManager {
      */
     fun updateAttachments() {
         attachments.forEach { (player, attachment) ->
-            attachment.permissions.forEach { (permission, granted) ->
-                if (granted) {
-                    attachment.unsetPermission(permission)
-                }
-            }
+            attachment.removeActivePermissions()
             player.setActivePermissions(attachment)
-            if (ConfigOptions.chatFormatting) {
-                player.updateDisplayName()
-            }
+            if (ConfigOptions.chatFormatting) { player.updateDisplayName() }
         }
     }
 
@@ -86,15 +75,9 @@ object PlayerManager {
      */
     fun updatePlayer(player: Player) {
         attachments[player]?.let {
-            it.permissions.forEach { (permission, granted) ->
-                if (granted) {
-                    it.unsetPermission(permission)
-                }
-            }
+            it.removeActivePermissions()
             player.setActivePermissions(it)
-            if (ConfigOptions.chatFormatting) {
-                player.updateDisplayName()
-            }
+            if (ConfigOptions.chatFormatting) { player.updateDisplayName() }
         }
     }
 
