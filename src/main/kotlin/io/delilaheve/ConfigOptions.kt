@@ -3,6 +3,9 @@ package io.delilaheve
 import io.delilaheve.ConfigOptions.PrefixSuffixModes.Companion
 import io.delilaheve.ConfigOptions.PrefixSuffixModes.OVERRIDE
 import io.delilaheve.LilysPermissions.Companion.CONFIG_FILE
+import io.delilaheve.util.LogUtil
+import io.delilaheve.util.YamlUtil
+import io.delilaheve.util.YamlUtil.trySave
 import org.bukkit.configuration.Configuration
 
 /**
@@ -122,31 +125,38 @@ object ConfigOptions {
      *
      * Last changed for v1.0.4
      */
-    private fun missingConfigNodes(): Boolean = listOf(
-        PATH_TAB_LIST_FORMATTING,
-        PATH_TAB_LIST_RESTRICT,
-        PATH_TAB_LIST_GROUPS
-    ).any { config?.contains(it) != true }
+    private fun missingConfigNodes(): Boolean {
+        val configOnDisk = YamlUtil.getFile(CONFIG_FILE)
+        return listOf(
+            PATH_TAB_LIST_FORMATTING,
+            PATH_TAB_LIST_RESTRICT,
+            PATH_TAB_LIST_GROUPS
+        ).any { configOnDisk?.get(it) == null }
+    }
 
     /**
      * Upgrade the config file to contain the latest options,
      * preserving current settings in the process
      */
-    private fun upgradeConfig() = config?.let {
+    private fun upgradeConfig(){
+        var configOnDisk = YamlUtil.getFile(CONFIG_FILE) ?: return
         val currentValues = mutableMapOf<String, Any>()
         // For now config.yml only has shallow keys, so we can get away with this
-        it.getKeys(false).map { key ->
-            it.get(key)?.let { value ->
+        configOnDisk.getKeys(false).map { key ->
+            configOnDisk.get(key)?.let { value ->
                 currentValues.put(key, value)
             }
         }
         // Replace the config file
         LilysPermissions.instance
             ?.saveResource(CONFIG_FILE, true)
+        // Re-grab config on disk since we've just changed it
+        configOnDisk = YamlUtil.getFile(CONFIG_FILE) ?: return
         // Restore saved values
         currentValues.forEach { (key, value) ->
-            it.set(key, value)
+            configOnDisk.set(key, value)
         }
+        configOnDisk.trySave(CONFIG_FILE)
     }
 
 }
