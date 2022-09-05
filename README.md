@@ -14,7 +14,17 @@ Need a hand figuring out permissions? The plugin ships with comprehensive exampl
 - Configurable prefix/suffix modes (combine vs override)
 - Full colour formatting for player display names
   - Supports strikethrough, bold, magic, and more!
-  
+
+### Commands and Permissions:
+
+| Permission | Command | Description |
+| --- | --- | --- |
+| `lilys_permissions.promote` | `/promote <user> [ladder]` | Promote the given `<user>`</br>with option to specify a `[ladder]`.</br></br>If none is given, the plugin will</br>attempt to determine the ladder. |
+| `lilys_permissions.demote` | `/demote <user> [ladder]` | Demote the given `<user>`</br>with option to specify a `[ladder]`.</br></br>If none is given, the plugin will</br>attempt to determine the ladder. |
+| `lilys_permissions.set_group` | `/set-group <user> <group1> [group2]...` | Set the group(s) for the given `<user>`.</br></br>This will overwrite `<user>`'s</br>existing groups. |
+| `lilys_permissions.add_group` | `/add-group <user> <group1> [group2]...` | Add group(s) to the given `<user>`. |
+| `lilys_permissions.reload` | `/lp-reload` | Reload permissions for all players.</br></br>This will take any changes</br>made to `permissions.yml`</br>and`users.yml` into account. |
+
 ### Default Configurations:
   
 <details>
@@ -154,6 +164,21 @@ groups:
     # being given carte-blanche to perform any action or command
     permissions:
     - "*"
+    # We can define a denyPermissions node to force-disable permissions. This is useful when you
+    # have a small number of permissions you don't want a group to have. Instead of listing off the
+    # hundreds of permissions you do want, you can simply deny the handful you don't want.
+    #
+    # Denied permissions do not support the '*' wildcard intentionally to avoid wasted processor cycles
+    # should it be used in the "permissions" list.
+    #
+    # Denied permissions will be applied after the permissions list, meaning they will overwrite any
+    # granted permissions, either from this group or inherited groups.
+    #
+    # Akin to the "permissions" list, this will inherit from any groups defined in the "inherit" list.
+    #
+    # The "denyPermissions" node can also be defined in a world override.
+    denyPermissions:
+    - some.permission
 
 # Rank ladder lists allow you to quickly /promote and /demote users within the first ladder
 # where they have a group defined. You can optionally provide a ladder name to promote/demote
@@ -217,15 +242,18 @@ users:
   61699b2e-d327-4a01-9f1e-0ea8c3f06bc6:
     # Groups this user is part of
     groups:
-    - netherDefault
-    - admin
+      - netherDefault
+      - admin
     # Prefix this user should have instead of their group's
     prefix: "&k[Upside Down]"
     # Suffix this user should have instead of their group's
     suffix: "&r"
     # Permissions this user should be given in addition to their group's
     permissions:
-    - upsidedown.allow
+      - upsidedown.allow
+    # Permissions this user should be denied in addition to their group's
+    denyPermissions:
+      - rightsideup.allow
 
 ```
 </details>
@@ -244,6 +272,17 @@ save_all_players: true
 
 # Toggle player name formatting
 chat_formatting: true
+
+# Whether the plugin should alter display names in the player list (tab list)
+tab_list_formatting: true
+
+# Whether the plugin should only alter tab list names for whitelisted groups
+tab_list_restrict_groups: false
+
+# List of group names whose member's names should be altered in the tab list
+#
+# This list will only take effect if "tab_list_restrict_groups" is true
+tab_list_groups: []
 
 # What "mode" should a user's prefix operate in? Valid options are:
 #
